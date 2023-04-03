@@ -22,11 +22,12 @@ namespace e_commerce.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetProducts() 
+        public async Task Get() 
         {
-            
-            var products=_productReadDal.GetAll();
-            return Ok(products);
+
+            var result=await _productReadDal.GetByIdAsync("1e90a299-e403-4547-a6d7-90996854d114", false);
+            result.Name = "11p";
+            await _productWriteDal.SaveAsync();
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
