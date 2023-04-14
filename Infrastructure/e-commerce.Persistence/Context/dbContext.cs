@@ -30,6 +30,7 @@ namespace e_commerce.Persistence.Context
                 {
                     EntityState.Added=>data.Entity.CreatedDate=DateTime.UtcNow,
                     EntityState.Modified=>data.Entity.UpdatedDate=DateTime.UtcNow,
+                    _=>DateTime.UtcNow,
                 };
             }
             return base.SaveChangesAsync(cancellationToken);

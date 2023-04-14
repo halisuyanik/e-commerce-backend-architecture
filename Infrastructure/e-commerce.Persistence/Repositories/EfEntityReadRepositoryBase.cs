@@ -21,7 +21,7 @@ namespace e_commerce.Persistence.Repositories
         }
         public DbSet<TEntity> Table => _context.Set<TEntity>();
 
-        public IQueryable<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null, bool tracking = true)
+        public IQueryable<TEntity> GetAll( bool tracking = true)
         {
             var query = Table.AsQueryable();
             if (!tracking)

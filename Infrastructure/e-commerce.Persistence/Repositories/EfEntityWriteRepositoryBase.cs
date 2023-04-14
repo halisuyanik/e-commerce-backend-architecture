@@ -42,7 +42,7 @@ namespace e_commerce.Persistence.Repositories
             return entityEntry.State == EntityState.Deleted;
         }
 
-        public async Task<bool> Remove(string id)
+        public async Task<bool> RemoveAsync(string id)
         {
             TEntity entity=await Table.FirstOrDefaultAsync(x=>x.Id==Guid.Parse(id));
             return Remove(entity);

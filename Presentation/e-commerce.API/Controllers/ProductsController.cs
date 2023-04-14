@@ -1,10 +1,12 @@
 ﻿
+using e_commerce.Application.DTOs.Products;
 using e_commerce.Application.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace e_commerce.API.Controllers
@@ -22,18 +24,43 @@ namespace e_commerce.API.Controllers
         }
 
         [HttpGet]
-        public async Task Get() 
+        public IActionResult GetAll()
         {
-
-            var result=await _productReadDal.GetByIdAsync("1e90a299-e403-4547-a6d7-90996854d114", false);
-            result.Name = "11p";
+            return Ok( _productReadDal.GetAll(false));
+        }
+        [HttpPost]
+        public async Task<IActionResult> Post(ProductCreateDto product)
+        {
+            await _productWriteDal.AddAsync(new()
+            {
+                Name = product.Name,
+                Price=product.Price,
+                Stock=product.Stock
+            });
             await _productWriteDal.SaveAsync();
+            return StatusCode((int)HttpStatusCode.Created);
+        }
+        [HttpPut]
+        public async Task<IActionResult> Put(ProductUpdateDto product)
+        {
+            var res=await _productReadDal.GetByIdAsync(product.Id);
+            res.Stock = product.Stock;
+            res.Price = product.Price;
+            res.Name = product.Name;
+            await _productWriteDal.SaveAsync();
+            return Ok();
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            await _productWriteDal.RemoveAsync(id);
+            await _productWriteDal.SaveAsync();
+            return Ok();
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            var product = await _productReadDal.GetByIdAsync(id);
-            return Ok(product);
+            return Ok(await _productReadDal.GetByIdAsync(id, false));
         }
     }
 }
