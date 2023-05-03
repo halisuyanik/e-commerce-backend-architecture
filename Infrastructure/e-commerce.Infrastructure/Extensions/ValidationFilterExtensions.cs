@@ -16,6 +16,7 @@ namespace e_commerce.Infrastructure.Extensions
             {
                 var errors=context.ModelState.Where(x=>x.Value.Errors.Any()).ToDictionary(x=>x.Key, x=>x.Value.Errors.Select(x=>x.ErrorMessage)).ToArray();
                 context.Result = new BadRequestObjectResult(errors);
+                return;
             }
             await next();
         }
